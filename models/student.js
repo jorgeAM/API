@@ -6,9 +6,8 @@ const studentSchema = new Schema({
   nombre: String,
   apellidoPaterno: String,
   apellidoMaterno: String,
-  escuelaAcademina: String,
+  escuelaAcademica: String,
   facultad: String,
-  ruta: String,
   courses: [
     {
       type: Schema.Types.ObjectId,
