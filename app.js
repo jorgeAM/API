@@ -9,9 +9,9 @@ const photoRoutes = require('./routes/photoRoutes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//para que retorno datos en formato JSON
-app.use(bodyParser.json());
-app.get('/', (req, res) => res.send('Hola Mundo!!'));
+//para que retorno datos en formato JSON y acepte un tamaño limite de peticiones
+app.use(bodyParser.json({ limit: '30mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/api', courseRoutes);
 app.use('/api', studentRoutes);
