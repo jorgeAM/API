@@ -2,8 +2,25 @@ const Course = require('../models/course');
 
 function getCourses(req, res) {
   Course.find().exec((err, courses) => {
-    if (err) console.log(err);
-    res.status(200).send({ courses: courses });
+    if (err) {
+      res.status(200).send({
+        code: 200,
+        status: 'error',
+        data: err,
+      });
+    }else res.status(200).send({
+      code: 200,
+      status: 'success',
+      data: courses,
+    });
+  });
+}
+
+function getCourse(req, res) {
+  let id = req.params.id;
+  Course.findById(id).exec((err, course) => {
+    if (err) return handleError(err);
+    res.status(200).send({ course: course });
   });
 }
 
@@ -44,6 +61,7 @@ function deleteCourse(req, res) {
 
 module.exports = {
   getCourses,
+  getCourse,
   saveCourse,
   updateCourse,
   deleteCourse,

@@ -4,10 +4,18 @@ const path = require('path');
 
 function getPhotosFromStudent(req, res) {
   let student = req.params.student;
-  Photo.find({ student: student }, (err, photos) => {
-    if (err) console.log(err);
-    res.status(200).send({
-      photos: photos,
+  Photo.find({ student: student }).populate('student').
+  exec((err, photos) => {
+    if (err) {
+      res.status(200).send({
+        code: 500,
+        status: 'error',
+        data: err,
+      });
+    }else res.status(200).send({
+      code: 200,
+      status: 'success',
+      data: photos,
     });
   });
 }
@@ -28,10 +36,16 @@ function savePhoto(req, res) {
     let ext = arrayAux[1];
     if (ext == 'png' || ext == 'jpg' || ext == 'gif' || ext == 'jpeg') {
       photo.save((err, photo) => {
-        if (err) console.log(err);
-        res.status(200).send({
-          message: 'Se subio correctamente la foto',
-          photo: photo,
+        if (err) {
+          res.status(500).send({
+            code: 500,
+            status: 'error',
+            data: err,
+          });
+        } else res.status(200).send({
+          code: 200,
+          status: 'success',
+          data: photo,
         });
       });
     }else {
@@ -50,15 +64,22 @@ function savePhoto(req, res) {
 function deletePhoto(req, res) {
   let id = req.params.id;
   Photo.findByIdAndRemove(id, (err, photo) => {
-    if (err) console.log(err);
+    if (err) {
+      res.status(200).send({
+        code: 200,
+        status: 'error',
+        data: err,
+      });
+    }
 
     //elimimos archivo de la carpeta donde esta almacenado
     fs.unlink(photo.ruta, (err) => {
       if (err) console.log(err);
     });
     res.status(200).send({
-      message: 'Se elimino correctamente la foto',
-      photo: photo,
+      code: 200,
+      status: 'success',
+      data: photo,
     });
   });
 }
