@@ -8,5 +8,6 @@ api.get('/estudiante/:id', studentController.getStudent);
 api.post('/estudiante', studentController.saveStudent);
 api.put('/estudiante/:id', studentController.updateStudent);
 api.delete('/estudiante/:id', studentController.deleteStudent);
+api.get('/matriculas', studentController.getCodigoCarnets);
 
 module.exports = api;
