@@ -20,7 +20,7 @@ function getStudents(req, res) {
 
 function getStudent(req, res) {
   let id = req.params.id;
-  Student.findById(id).exec((err, student) => {
+  Student.findById(id).populate('courses').exec((err, student) => {
     if (err) {
       res.status(500).send({
         code: 500,
@@ -157,6 +157,23 @@ function getStudentByCarnet(req, res) {
   });
 }
 
+function showCoursePerStudent(req, res) {
+  let id = req.params.id;
+  Student.findById(id).populate('courses').select('-_id courses').exec((err, student) => {
+    if (err) {
+      res.status(500).send({
+        code: 500,
+        status: 'error',
+        data: err,
+      });
+    }else res.status(200).send({
+      code: 200,
+      status: 'success',
+      data: student,
+    });
+  });
+}
+
 module.exports = {
   getStudents,
   getStudent,
@@ -165,4 +182,5 @@ module.exports = {
   updateStudent,
   deleteStudent,
   getCodigoCarnets,
+  showCoursePerStudent,
 };
