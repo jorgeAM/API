@@ -1,5 +1,7 @@
 const Photo = require('../models/photo');
+const Student = require('../models/student');
 const fs = require('fs');
+const moment = require('moment');
 const path = require('path');
 
 function getPhotosFromStudent(req, res) {
@@ -21,44 +23,62 @@ function getPhotosFromStudent(req, res) {
 }
 
 function savePhoto(req, res) {
-  let student = req.params.student;
-  let photo = new Photo();
-  if (req.files.foto) {
-    //sacar nombre del archivo subido
-    let ruta = req.files.foto.path;
-    let array = ruta.split('/');
-    photo.nombre = array[2];
-    photo.ruta = req.files.foto.path;
-    photo.student = student;
+  let studentId = req.params.student;
+  let estudiante = {};
 
-    //sacamos extencion del archivo subido
-    let arrayAux = array[2].split('.');
-    let ext = arrayAux[1];
-    if (ext == 'png' || ext == 'jpg' || ext == 'gif' || ext == 'jpeg') {
-      photo.save((err, photo) => {
-        if (err) {
-          res.status(500).send({
-            code: 500,
-            status: 'error',
-            data: err,
-          });
-        } else res.status(200).send({
-          code: 200,
-          status: 'success',
-          data: photo,
+  //buscamos estudiante
+  Student.findById(studentId).exec((err, student) => {
+    if (err) console.log(err);
+    else if (!student) console.log('no se encontro estudiante');
+    else {
+      let photo = new Photo();
+      if (req.files.foto) {
+        //sacar nombre del archivo subido
+        let ruta = req.files.foto.path;
+        let rootPath = 'uploads/students/';
+        let array = ruta.split('/');
+
+        //sacamos extencion del archivo subido
+        let arrayAux = array[2].split('.');
+        let ext = arrayAux[1];
+        let newName = `${student.codigoCarnet}-${moment.now()}.${ext}`;
+        let nuevaRuta = rootPath + newName;
+
+        //cambiamos nombre a archivo fisico
+        fs.rename(ruta, nuevaRuta, (err) => {
+          console.log(err);
         });
-      });
-    }else {
-      res.status(200).send({ message: 'Solo puedes subir imágenes' });
 
-      //eliminamos archivo que se sube de todas formas
-      fs.unlink(ruta, err => {
-        if (err) console.log(err);
-      });
+        photo.nombre = newName;
+        photo.ruta = nuevaRuta;
+        photo.student = studentId;
+        if (ext == 'png' || ext == 'jpg' || ext == 'gif' || ext == 'jpeg') {
+          photo.save((err, photo) => {
+            if (err) {
+              res.status(500).send({
+                code: 500,
+                status: 'error',
+                data: err,
+              });
+            } else res.status(200).send({
+              code: 200,
+              status: 'success',
+              data: photo,
+            });
+          });
+        }else {
+          res.status(200).send({ message: 'Solo puedes subir imágenes' });
+
+          //eliminamos archivo que se sube de todas formas
+          fs.unlink(ruta, err => {
+            if (err) console.log(err);
+          });
+        }
+      }else {
+        res.status(200).send({ message: 'Debes subir una imagen' });
+      }
     }
-  }else {
-    res.status(200).send({ message: 'Debes subir una imagen' });
-  }
+  });
 }
 
 function deletePhoto(req, res) {
