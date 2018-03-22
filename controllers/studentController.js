@@ -106,10 +106,12 @@ function deleteStudent(req, res) {
                 message: 'No se pudo eliminar fotos',
               });
             }else {
-              //borramos las fotos fisicamente
-              fs.unlink(photo.ruta, (err) => {
-                if (err) console.log(err);
-              });
+              if (photo.ruta) {
+                //borramos las fotos fisicamente
+                fs.unlink(photo.ruta, (err) => {
+                  if (err) console.log(err);
+                });
+              }
 
               res.status(200).send({
                 code: 200,
