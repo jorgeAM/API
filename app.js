@@ -4,10 +4,12 @@ const cors = require('cors');
 const app = express();
 app.use(express.static('uploads'));
 app.use('/students', express.static(__dirname + '/students'));
+
 //rutas
 const courseRoutes = require('./routes/courseRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const photoRoutes = require('./routes/photoRoutes');
+const recognitionRoutes = require('./routes/recognitionRoutes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
