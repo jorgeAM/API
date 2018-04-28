@@ -35,6 +35,23 @@ function getStudent(req, res) {
   });
 }
 
+function getStudent4Code(req, res) {
+  let codigo = req.params.codigo;
+  Student.find({ codigoCarnet: codigo }).populate('courses').exec((err, student) => {
+    if (err) {
+      res.status(500).send({
+        code: 500,
+        status: 'error',
+        data: err,
+      });
+    }else res.status(200).send({
+      code: 200,
+      status: 'success',
+      data: student,
+    });
+  });
+}
+
 function saveStudent(req, res) {
   let student = new Student();
   student.codigoCarnet = req.body.codigoCarnet;
@@ -163,6 +180,7 @@ function showCoursePerStudent(req, res) {
 module.exports = {
   getStudents,
   getStudent,
+  getStudent4Code,
   getStudentByCarnet,
   saveStudent,
   updateStudent,

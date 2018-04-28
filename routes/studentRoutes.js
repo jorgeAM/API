@@ -5,6 +5,7 @@ var api = express.Router();
 
 api.get('/estudiantes', studentController.getStudents);
 api.get('/estudiante/:id', studentController.getStudent);
+api.get('/estudiante/:codigo', studentController.getStudent);
 api.get('/estudiante/:id/cursos', studentController.showCoursePerStudent);
 api.post('/estudiante', studentController.saveStudent);
 api.post('/searchEstudiante', studentController.getStudentByCarnet);

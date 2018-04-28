@@ -86,6 +86,7 @@ function recognition() {
   		  const faceImg = twoFacesImg.getRegion(faceRect).bgrToGray();
   		  //OBTENIENDO EL LABEL O NOMBRE DEL ROSTRO OBTENIDO
   		  const who = nameMappings[lbph.predict(faceImg).label];
+      }
     }else {
       res.status(200).send({ message: 'Solo puedes subir imágenes' });
 
