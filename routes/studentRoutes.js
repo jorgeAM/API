@@ -11,5 +11,5 @@ api.post('/estudiante', studentController.saveStudent);
 api.post('/searchEstudiante', studentController.getStudentByCarnet);
 api.put('/estudiante/:id', studentController.updateStudent);
 api.delete('/estudiante/:id', studentController.deleteStudent);
-
+api.post('/searchStudent', studentController.searchStudent);
 module.exports = api;

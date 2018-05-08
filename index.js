@@ -6,5 +6,5 @@ const db = mongoose.connection;
 db.on('error', console.log.bind(console, 'No se pudo conectar'));
 db.once('open', () => {
   console.log('Se conecto correctamente a Mongo');
-  app.listen(3005, () => console.log('Servidor corriendo en puerto 3005!'));
+  app.listen(8080, () => console.log('Servidor corriendo en puerto 8080!'));
 });
