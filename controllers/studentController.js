@@ -268,10 +268,12 @@ function showCoursePerStudent(req, res) {
 }
 
 function saveAvatar(req, res) {
-  let studentId = req.params.student;
+  let studentId = req.params.id;
   if (req.files.foto){
 		//ruta del archivo
 		var file_path = req.files.foto.path;
+    console.log(studentId);
+    console.log(file_path);
 		//separamos la ruta por '/'
 		var file_split = file_path.split('/');
 		//sacamos el nombre de archivo
@@ -283,7 +285,7 @@ function saveAvatar(req, res) {
 		//comprobamos si es un imagen
 		if(ext_file == 'png' || ext_file == 'jpg' || ext_file == 'gif'){
 			//me deja subir la imagen
-			Student.findByIdAndUpdate(userId, {avatar: file_path}, (err, student) => {
+			Student.findByIdAndUpdate(studentId, {avatar: file_path}, (err, student) => {
 				if(err){
 					res.status(500).send({message: 'Error al subir imagen!'});
 				}else {

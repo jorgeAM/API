@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 app.use(express.static('uploads'));
 app.use('/students', express.static(__dirname + '/students'));
-
+app.use('/avatar', express.static(__dirname + '/avatar'));
 //rutas
 const courseRoutes = require('./routes/courseRoutes');
 const studentRoutes = require('./routes/studentRoutes');

@@ -17,5 +17,5 @@ api.post('/searchEstudiante', studentController.getStudentByCarnet);
 api.put('/estudiante/:id', studentController.updateStudent);
 api.delete('/estudiante/:id', studentController.deleteStudent);
 api.post('/searchStudent', studentController.searchStudent);
-api.post('/uploadAvatar', multipartMiddleware, studentController.saveAvatar);
+api.post('/uploadAvatar/:id', multipartMiddleware, studentController.saveAvatar);
 module.exports = api;
