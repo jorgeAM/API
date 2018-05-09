@@ -267,6 +267,45 @@ function showCoursePerStudent(req, res) {
   });
 }
 
+function saveAvatar(req, res) {
+  let studentId = req.params.student;
+  if (req.files.foto){
+		//ruta del archivo
+		var file_path = req.files.foto.path;
+		//separamos la ruta por '/'
+		var file_split = file_path.split('/');
+		//sacamos el nombre de archivo
+		var file_name = file_split[2];
+		//separamos el nombre del archivo por .
+		var ext_split = file_name.split('.')
+		//sacamos la extensión del archivo
+		var ext_file = ext_split[1];
+		//comprobamos si es un imagen
+		if(ext_file == 'png' || ext_file == 'jpg' || ext_file == 'gif'){
+			//me deja subir la imagen
+			Student.findByIdAndUpdate(userId, {avatar: file_path}, (err, student) => {
+				if(err){
+					res.status(500).send({message: 'Error al subir imagen!'});
+				}else {
+					if(!student){
+						res.status(404).send({message: 'No pudo actualizar el usuario, ctm!'});
+					}else{
+						res.status(200).send({image: file_name, student: student});
+						}
+				}
+			});
+		}else{
+      //eliminamos archivo que se sube de todas formas
+      fs.unlink(ruta, err => {
+        if (err) console.log(err);
+      });
+			res.status(200).send({message: 'agg tmr, solo puedes subir imagenes'});
+		}
+	}else{
+		res.status(200).send({message: 'Crrano, no se ha subio ninguna imagen'});
+	}
+}
+
 module.exports = {
   getStudents,
   getStudent,
@@ -277,4 +316,5 @@ module.exports = {
   deleteStudent,
   showCoursePerStudent,
   searchStudent,
+  saveAvatar
 };

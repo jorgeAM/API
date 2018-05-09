@@ -1,5 +1,10 @@
 const express = require('express');
 const studentController = require('../controllers/studentController');
+/*Para subir avatar*/
+const multipart = require('connect-multiparty');
+var multipartMiddleware = multipart({
+  uploadDir: './uploads/avatar',
+});
 
 var api = express.Router();
 
@@ -12,4 +17,5 @@ api.post('/searchEstudiante', studentController.getStudentByCarnet);
 api.put('/estudiante/:id', studentController.updateStudent);
 api.delete('/estudiante/:id', studentController.deleteStudent);
 api.post('/searchStudent', studentController.searchStudent);
+api.post('/uploadAvatar', multipartMiddleware, studentController.saveAvatar);
 module.exports = api;

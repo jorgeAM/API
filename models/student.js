@@ -20,6 +20,10 @@ const studentSchema = new Schema({
       ref: 'Course',
     },
   ],
+  avatar: {
+    type: String,
+    default: 'null',
+  },
 });
 
 module.exports = mongoose.model('Student', studentSchema);
