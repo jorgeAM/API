@@ -1,4 +1,4 @@
-function getCodigoCarnets(req, res) {
+async function getCodigoCarnets(req, res) {
   Student.find().select('-_id codigoCarnet').exec((err, students) => {
     if (err) {
       res.status(500).send({
